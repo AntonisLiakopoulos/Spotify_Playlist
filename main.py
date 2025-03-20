@@ -1,13 +1,9 @@
-from bs4 import BeautifulSoup
-import requests
+from songs_search import PlaylistManager
+from billboard_scraping import get_songs
 
-header = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:131.0) Gecko/20100101 Firefox/131.0"}
+song_names = get_songs()
 
-response = requests.get("https://www.billboard.com/charts/hot-100/2000-08-12/",headers=header)
-webpage = response.text
-soup = BeautifulSoup(webpage, "html.parser")
-
-
-song_names_spans = soup.select("li ul li h3")
-song_names = [song.getText().strip() for song in song_names_spans]
-print(song_names)
+playlist_manager = PlaylistManager()
+playlist_manager.get_track_uri(song_names)
+playlist_manager.create_playlist()
+playlist_manager.add_to_playlist()
